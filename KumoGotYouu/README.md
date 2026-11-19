@@ -9,11 +9,11 @@ The project also demonstrates how embedded systems, robotics, Wi-Fi communicatio
 Overall, the purpose of KumoGotYou is to create a low-cost prototype platform for learning and demonstrating remote robotics, environmental monitoring, surveillance, and search-and-rescue support concepts.
 
 Our Project was featured in UCSY(University Of Computer Studies) Product Show and Job Fair 2026!!
-<img width="1280" height="720" alt="photo_2026-11-19_13-24-20" src="https://github.com/user-attachments/assets/4bdc52ec-3b25-4986-87ac-b2bf5769c1ab" />
+<img width="1000" height="720" alt="photo_2026-11-19_13-24-20" src="https://github.com/user-attachments/assets/4bdc52ec-3b25-4986-87ac-b2bf5769c1ab" />
 
-<img width="1280" height="720" alt="photo_2026-08-28_14-25-28" src="https://github.com/user-attachments/assets/7ee208ad-33a0-4809-a266-6b76e197232c" />
+<img width="1000" height="720" alt="photo_2026-08-28_14-25-28" src="https://github.com/user-attachments/assets/7ee208ad-33a0-4809-a266-6b76e197232c" />
 
-<img width="1280" height="720" alt="photo_2026-11-19_13-44-27" src="https://github.com/user-attachments/assets/918e99de-5800-4a96-bb98-743ea087b45a" />
+<img width="1000" height="720" alt="photo_2026-11-19_13-44-27" src="https://github.com/user-attachments/assets/918e99de-5800-4a96-bb98-743ea087b45a" />
 
 
 ## Main features
