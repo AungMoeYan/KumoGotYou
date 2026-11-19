@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#050911"
+    >
+
+    <title>KumoGotYou | Hexapod Control</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         BACKGROUND
+         ===================================================== -->
+
+    <div class="background-grid"></div>
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+    <div class="scanline"></div>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                K
+            </div>
+
+            <div>
+                <div class="logo">
+                    KUMOGOTYOU
+                </div>
+
+                <div class="subtitle">
+                    ESP32 DEVKIT HEXAPOD CONTROL SYSTEM
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="header-center">
+
+            <div class="system-state">
+                <span class="pulse"></span>
+                SYSTEM READY
+            </div>
+
+        </div>
+
+
+        <div class="connection-area">
+
+            <div class="status-pill">
+
+                <span
+                    id="espDot"
+                    class="status-dot offline"
+                ></span>
+
+                <span>ESP32</span>
+
+                <b id="espStatus">
+                    OFFLINE
+                </b>
+
+            </div>
+
+
+            <div class="status-pill">
+
+                <span
+                    id="camDot"
+                    class="status-dot offline"
+                ></span>
+
+                <span>CAM</span>
+
+                <b id="camStatus">
+                    OFFLINE
+                </b>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         DASHBOARD
+         ===================================================== -->
+
+    <main class="dashboard">
+
+
+        <!-- =================================================
+             CAMERA
+             ================================================= -->
+
+        <section class="glass camera-card">
+
+            <div class="section-title">
+
+                <div class="title-left">
+                    <span class="title-indicator"></span>
+                    <span>LIVE VISUAL FEED</span>
+                </div>
+
+                <div
+                    id="cameraLabel"
+                    class="section-status"
+                >
+                    OFFLINE
+                </div>
+
+            </div>
+
+
+            <div class="camera-frame">
+
+                <img
+    id="cameraFeed"
+    src="{{ url_for('camera') }}"
+    alt="KumoGotYou Live Camera"
+>
+
+                <div
+                    id="cameraOverlay"
+                    class="camera-overlay"
+                >
+
+                    <div class="offline-message">
+
+                        <div class="offline-icon">
+                            ◉
+                        </div>
+
+                        <div>
+                            CAMERA OFFLINE
+                        </div>
+
+                        <small>
+                            Waiting for ESP32-CAM
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="camera-corner corner-tl"></div>
+                <div class="camera-corner corner-tr"></div>
+                <div class="camera-corner corner-bl"></div>
+                <div class="camera-corner corner-br"></div>
+
+
+                <div class="camera-hud hud-top">
+                    LIVE / ESP32-CAM
+                </div>
+
+                <div class="camera-hud hud-bottom">
+                    KGY // VISUAL SYSTEM
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SENSOR STATUS
+             ================================================= -->
+
+        <section class="glass sensor-card">
+
+            <div class="section-title">
+
+                <div class="title-left">
+                    <span class="title-indicator"></span>
+                    <span>SENSOR ARRAY</span>
+                </div>
+
+                <span id="sensorUpdated" class="live-label">
+                    WAITING FOR DATA
+                </span>
+
+            </div>
+
+
+            <div class="sensor-grid">
+
+
+                <div class="sensor-box">
+
+                    <div class="sensor-top">
+
+                        <span class="sensor-icon">
+                            ◈
+                        </span>
+
+                        <span class="sensor-name">
+                            ULTRASONIC
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="distance"
+                        class="sensor-value"
+                    >
+                        --
+                    </div>
+
+                    <div class="sensor-unit">
+                        CENTIMETERS
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-box">
+
+                    <div class="sensor-top">
+
+                        <span class="sensor-icon">
+                            ◇
+                        </span>
+
+                        <span class="sensor-name">
+                            IR OBSTACLE
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="irStatus"
+                        class="sensor-value small"
+                    >
+                        CLEAR
+                    </div>
+
+                    <div
+                        id="irRaw"
+                        class="sensor-mini"
+                    >
+                        RAW: --
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-box">
+
+                    <div class="sensor-top">
+
+                        <span class="sensor-icon">
+                            ◎
+                        </span>
+
+                        <span class="sensor-name">
+                            PIR MOTION
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="pirStatus"
+                        class="sensor-value small"
+                    >
+                        CLEAR
+                    </div>
+
+                    <div class="sensor-unit">
+                        MOTION SENSOR
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-box">
+
+                    <div class="sensor-top">
+
+                        <span class="sensor-icon">
+                            ▣
+                        </span>
+
+                        <span class="sensor-name">
+                            MQ-2
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="mq2"
+                        class="sensor-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sensor-unit">
+                        GAS / SMOKE
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MOVEMENT
+             ================================================= -->
+
+        <section class="glass movement-card">
+
+            <div class="section-title">
+
+                <div class="title-left">
+                    <span class="title-indicator"></span>
+                    <span>LOCOMOTION</span>
+                </div>
+
+                <span class="mode-label">
+                    MANUAL
+                </span>
+
+            </div>
+
+
+            <div
+                id="movementDisplay"
+                class="movement-display"
+            >
+                <span class="movement-dot"></span>
+                STOP
+            </div>
+
+
+            <div class="movement-pad">
+
+
+                <button
+                    class="move-btn"
+                    data-command="forward"
+                >
+                    <strong>▲</strong>
+                    <span>FORWARD</span>
+                </button>
+
+
+                <div class="movement-middle">
+
+                    <button
+                        class="move-btn"
+                        data-command="left"
+                    >
+                        <strong>◀</strong>
+                        <span>LEFT</span>
+                    </button>
+
+
+                    <button
+                        class="move-btn stop-btn"
+                        data-command="stop"
+                    >
+                        <strong>■</strong>
+                        <span>STOP</span>
+                    </button>
+
+
+                    <button
+                        class="move-btn"
+                        data-command="right"
+                    >
+                        <strong>▶</strong>
+                        <span>RIGHT</span>
+                    </button>
+
+                </div>
+
+
+                <button
+                    class="move-btn"
+                    data-command="backward"
+                >
+                    <strong>▼</strong>
+                    <span>BACKWARD</span>
+                </button>
+
+            </div>
+
+
+            <div class="turn-row">
+
+                <button
+                    class="action-btn"
+                    data-command="turn_left"
+                >
+                    ↶
+                    TURN LEFT
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    data-command="turn_right"
+                >
+                    TURN RIGHT
+                    ↷
+                </button>
+
+            </div>
+
+        </section>
+
+<!-- =================================================
+             POSES
+             ================================================= -->
+
+        <section class="glass action-card">
+
+            <div class="section-title">
+
+                <div class="title-left">
+                    <span class="title-indicator"></span>
+                    <span>POSE CONTROL</span>
+                </div>
+
+                <span class="mode-label">
+                    PRESET
+                </span>
+
+            </div>
+
+
+            <div class="action-grid">
+
+                <button
+                    class="action-btn pose-btn"
+                    data-command="stand"
+                >
+                    <span>01</span>
+                    STAND
+                </button>
+
+
+                <button
+                    class="action-btn pose-btn"
+                    data-command="sit"
+                >
+                    <span>02</span>
+                    SIT
+                </button>
+
+
+                <button
+                    class="action-btn stop-action"
+                    data-command="stop"
+                >
+                    <span>!</span>
+                    STOP ROBOT
+                </button>
+
+            </div>
+
+
+            <div class="keyboard-hint">
+
+                <span>KEYBOARD</span>
+
+                <kbd>W</kbd>
+                <kbd>A</kbd>
+                <kbd>S</kbd>
+                <kbd>D</kbd>
+
+                <span class="hint-separator">|</span>
+
+                <kbd>Q</kbd>
+                <kbd>E</kbd>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             KUMO AI
+             ================================================= -->
+
+        <section class="glass ai-card">
+
+        
+
+<div id="ai-alert"></div>
+
+            <div class="section-title">
+
+                <div class="title-left">
+
+                    <span class="ai-orb"></span>
+
+                    <span>
+                        KUMO AI
+                    </span>
+
+                </div>
+
+                <div class="ai-tools">
+                    <span class="ai-status">AI ASSISTANT</span>
+                    <button id="voiceToggle" class="voice-toggle" type="button" aria-pressed="false">VOICE OFF</button>
+                </div>
+
+            </div>
+
+
+            <div
+                id="chat"
+                class="chat"
+            >
+
+                <div class="chat-message ai">
+
+                    <div class="message-tag">
+                        KUMO
+                    </div>
+
+                    <div>
+                        Kumo online. Awaiting command.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="chat-input-row">
+
+                <div class="input-prefix">
+                    >
+                </div>
+
+                <input
+                    id="aiInput"
+                    type="text"
+                    placeholder="Talk to Kumo..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="aiSend"
+                    class="send-btn"
+                >
+                    SEND
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="footer">
+
+        <span>
+            KUMOGOTYOU // HEXAPOD ROBOTICS PLATFORM
+        </span>
+
+        <span>
+            ESP32 DEVKIT
+        </span>
+
+    </footer>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+</html>
